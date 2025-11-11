@@ -57,6 +57,35 @@ vim.cmd("TSInstallFromGrammar stencil")
 
 If you prefer hacking on a local clone, change the `url` to an absolute path (e.g., `/Users/you/code/tree-sitter-stencil`) before running any of the commands above.
 
+### Example with lazy.nvim
+
+If you’re using [lazy.nvim](https://github.com/folke/lazy.nvim) like in [ivantokar’s Neovim config](https://github.com/ivantokar/.dotfiles/blob/main/.config/nvim/lua/plugins/treesitter.lua), place the `parser_config` snippet near the top of your Treesitter plugin spec:
+
+```lua
+config = function()
+  local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+  parser_config.stencil = {
+    install_info = {
+      url = "https://github.com/ivantokar/tree-sitter-stencil",
+      files = { "src/parser.c" },
+    },
+    filetype = "stencil",
+  }
+
+  vim.filetype.add({
+    extension = {
+      stencil = "stencil",
+    },
+  })
+
+  require("nvim-treesitter.configs").setup({
+    -- your existing treesitter settings …
+  })
+
+  vim.cmd("TSInstallFromGrammar stencil")
+end
+```
+
 ## Development
 
 ```bash
