@@ -1,0 +1,66 @@
+==================
+Nested Filters
+==================
+
+{{ entityName | camelCase | pluralize }}
+
+---
+
+(source_file
+  (output
+    expression: (pipe_expression
+      (or_expression
+        (and_expression
+          (not_expression
+            (comparison_expression
+              (additive_expression
+                (multiplicative_expression
+                  (unary_expression
+                    (primary_expression
+                      (identifier)))))))))
+      (filter_chain
+        name: (identifier))
+      (filter_chain
+        name: (identifier))))
+  (text))
+
+==================
+Logical Condition
+==================
+
+{% if field.type == 'string' and not field.optional %}
+{% endif %}
+
+---
+
+(source_file
+  (if_tag
+    condition: (pipe_expression
+      (or_expression
+        (and_expression
+          (not_expression
+            (comparison_expression
+              (additive_expression
+                (multiplicative_expression
+                  (unary_expression
+                    (primary_expression
+                      (member_expression
+                        (identifier)
+                        (identifier))))))
+              (additive_expression
+                (multiplicative_expression
+                  (unary_expression
+                    (primary_expression
+                      (string)))))))
+          (not_expression
+            (not_expression
+              (comparison_expression
+                (additive_expression
+                  (multiplicative_expression
+                    (unary_expression
+                      (primary_expression
+                        (member_expression
+                          (identifier)
+                          (identifier))))))))))))
+  (endif_tag)
+  (text))

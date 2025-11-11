@@ -1,0 +1,157 @@
+==================
+Conditional Tags
+==================
+
+{{ "value" }}
+{% if true %}
+A
+{% elif false %}
+B
+{% else %}
+C
+{% endif %}
+
+---
+
+(source_file
+  (output
+    expression: (pipe_expression
+      (or_expression
+        (and_expression
+          (not_expression
+            (comparison_expression
+              (additive_expression
+                (multiplicative_expression
+                  (unary_expression
+                    (primary_expression
+                      (string))))))))))
+  (if_tag
+    condition: (pipe_expression
+      (or_expression
+        (and_expression
+          (not_expression
+            (comparison_expression
+              (additive_expression
+                (multiplicative_expression
+                  (unary_expression
+                    (primary_expression
+                      (boolean))))))))))
+  (text)
+  (elif_tag
+    condition: (pipe_expression
+      (or_expression
+        (and_expression
+          (not_expression
+            (comparison_expression
+              (additive_expression
+                (multiplicative_expression
+                  (unary_expression
+                    (primary_expression
+                      (boolean))))))))))
+  (text)
+  (else_tag)
+  (text)
+  (endif_tag)
+  (text))
+
+==================
+Loop Tag
+==================
+
+{% for item in items limit: 2 %}
+  {{ item.name | camelCase }}
+{% endfor %}
+
+---
+
+(source_file
+  (for_tag
+    variable: (identifier)
+    collection: (pipe_expression
+      (or_expression
+        (and_expression
+          (not_expression
+            (comparison_expression
+              (additive_expression
+                (multiplicative_expression
+                  (unary_expression
+                    (primary_expression
+                      (identifier))))))))))
+    parameter: (for_parameter
+      name: (identifier)
+      value: (pipe_expression
+        (or_expression
+          (and_expression
+            (not_expression
+              (comparison_expression
+                (additive_expression
+                  (multiplicative_expression
+                    (unary_expression
+                      (primary_expression
+                        (number)))))))))))
+  (text)
+  (output
+    expression: (pipe_expression
+      (or_expression
+        (and_expression
+          (not_expression
+            (comparison_expression
+              (additive_expression
+                (multiplicative_expression
+                  (unary_expression
+                    (primary_expression
+                      (member_expression
+                        (identifier)
+                        (identifier))))))))))
+      (filter_chain
+        name: (identifier)))
+  (text)
+  (endfor_tag)
+  (text))
+
+==================
+Assignment Tag
+==================
+
+{% set serviceName = projectName | camelCase %}
+
+---
+
+(source_file
+  (assignment_tag
+    target: (identifier)
+    value: (pipe_expression
+      (or_expression
+        (and_expression
+          (not_expression
+            (comparison_expression
+              (additive_expression
+                (multiplicative_expression
+                  (unary_expression
+                    (primary_expression
+                      (identifier)))))))))
+      (filter_chain
+        name: (identifier))))
+  (text))
+
+==================
+Include Tag
+==================
+
+{% include "components/header" %}
+
+---
+
+(source_file
+  (include_tag
+    template: (pipe_expression
+      (or_expression
+        (and_expression
+          (not_expression
+            (comparison_expression
+              (additive_expression
+                (multiplicative_expression
+                  (unary_expression
+                    (primary_expression
+                      (string)))))))))))
+  (text))
