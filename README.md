@@ -21,13 +21,13 @@ The corpus lives under `corpus/` and can be expanded with more real-world Stenci
 
 ## Using with nvim-treesitter
 
-Until the parser is upstreamed you can register it manually inside your Neovim config:
+Until the parser is upstreamed you can register it manually inside your Neovim config (pointing straight at the GitHub repo):
 
 ```lua
 local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 parser_config.stencil = {
   install_info = {
-    url = "/absolute/path/to/tree-sitter-stencil",
+    url = "https://github.com/ivantokar/tree-sitter-stencil",
     files = { "src/parser.c" },
   },
   filetype = "stencil",
@@ -41,4 +41,4 @@ vim.filetype.add({
 })
 ```
 
-After reloading Neovim you can run `:TSInstallFromGrammar stencil` (or `:TSBufEnable highlight`) to enable highlighting for `.stencil` files.
+After reloading Neovim you can run `:TSInstallFromGrammar stencil` (or `:TSBufEnable highlight`) to enable highlighting for `.stencil` files. If you prefer hacking on a local clone, simply swap the `url` for your absolute filesystem path.
