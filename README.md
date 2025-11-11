@@ -27,8 +27,8 @@ vim.filetype.add({
 
 Then install the parser using your plugin manager of choice:
 
-```vim
-" Packer
+```lua
+-- Packer
 use({
   "nvim-treesitter/nvim-treesitter",
   run = ":TSUpdate",
