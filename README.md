@@ -14,6 +14,7 @@ parser_config.stencil = {
   install_info = {
     url = "https://github.com/ivantokar/tree-sitter-stencil",
     files = { "src/parser.c" },
+    branch = "main",
   },
   filetype = "stencil",
 }
@@ -57,6 +58,8 @@ vim.cmd("TSInstallFromGrammar stencil")
 
 If you prefer hacking on a local clone, change the `url` to an absolute path (e.g., `/Users/you/code/tree-sitter-stencil`) before running any of the commands above.
 
+> **Requires `tree-sitter` CLI** – `:TSInstallFromGrammar` shells out to the `tree-sitter` executable. Install it once via your preferred package manager (e.g. `brew install tree-sitter-cli`, `npm install -g tree-sitter-cli`, or `cargo install tree-sitter-cli`) before running the install command.
+
 ### Example with lazy.nvim
 
 If you’re using [lazy.nvim](https://github.com/folke/lazy.nvim) like in [ivantokar’s Neovim config](https://github.com/ivantokar/.dotfiles/blob/main/.config/nvim/lua/plugins/treesitter.lua), place the `parser_config` snippet near the top of your Treesitter plugin spec:
@@ -68,6 +71,7 @@ config = function()
     install_info = {
       url = "https://github.com/ivantokar/tree-sitter-stencil",
       files = { "src/parser.c" },
+      branch = "main",
     },
     filetype = "stencil",
   }
