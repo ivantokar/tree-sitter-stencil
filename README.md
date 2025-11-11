@@ -1,6 +1,6 @@
 # tree-sitter-stencil
 
-Tree-sitter grammar for the Stencil templating language (commonly used across Swift/Stencil projects). The grammar focuses on recognising the templating delimiters (`{{ }}`, `{% %}`, `{# #}`), control flow tags (`if`, `elif`, `else`, `for`, etc.), and the filter expressions that are commonly used inside Stencil templates so that editor integrations (like `nvim-treesitter`) can provide syntax highlighting and structural awareness.
+Tree-sitter grammar for the [Stencil](https://github.com/stencilproject/Stencil) templating language (commonly used across Swift/Stencil projects). The grammar focuses on recognising the templating delimiters (`{{ }}`, `{% %}`, `{# #}`), control flow tags (`if`, `elif`, `else`, `for`, etc.), and the filter expressions that are commonly used inside Stencil templates so that editor integrations (like `nvim-treesitter`) can provide syntax highlighting and structural awareness.
 
 ⚠️ **Under construction:** Expect rapid changes while the parser/queries mature. Pull the latest version before reporting issues.
 
