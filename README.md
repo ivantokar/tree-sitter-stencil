@@ -6,7 +6,7 @@ Tree-sitter grammar for the Stencil templating language (commonly used across Sw
 
 ## Neovim Installation (nvim-treesitter)
 
-Stencil isn’t bundled with `nvim-treesitter` yet, so register it manually:
+Stencil isn’t bundled with `nvim-treesitter` yet, so register it manually. Drop the following snippet somewhere in your Neovim config (e.g., `init.lua`, `lua/plugins/treesitter.lua`, or any file that runs after `nvim-treesitter` loads):
 
 ```lua
 local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
@@ -25,7 +25,7 @@ vim.filetype.add({
 })
 ```
 
-After reloading Neovim you can install the parser via your preferred plugin manager:
+Then install the parser using your plugin manager of choice:
 
 ```vim
 " Packer
@@ -34,8 +34,10 @@ use({
   run = ":TSUpdate",
 })
 vim.cmd("TSInstallFromGrammar stencil")
+```
 
-" Lazy.nvim (inside the spec)
+```lua
+-- Lazy.nvim
 {
   "nvim-treesitter/nvim-treesitter",
   build = ":TSUpdate",
@@ -46,12 +48,14 @@ vim.cmd("TSInstallFromGrammar stencil")
     vim.cmd("TSInstallFromGrammar stencil")
   end,
 }
+```
 
-" Vimscript fallback
+```vim
+" Vimscript / bare Neovim
 :TSInstallFromGrammar stencil
 ```
 
-If you prefer hacking on a local clone, change the `url` to an absolute path (e.g., `/Users/you/code/tree-sitter-stencil`) before running `:TSInstallFromGrammar stencil` or `:TSBufEnable highlight`.
+If you prefer hacking on a local clone, change the `url` to an absolute path (e.g., `/Users/you/code/tree-sitter-stencil`) before running any of the commands above.
 
 ## Development
 
