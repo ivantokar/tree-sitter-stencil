@@ -2,6 +2,8 @@
 
 Tree-sitter grammar for the Stencil templating language (commonly used across Swift/Stencil projects). The grammar focuses on recognising the templating delimiters (`{{ }}`, `{% %}`, `{# #}`), control flow tags (`if`, `elif`, `else`, `for`, etc.), and the filter expressions that are commonly used inside Stencil templates so that editor integrations (like `nvim-treesitter`) can provide syntax highlighting and structural awareness.
 
+⚠️ **Under construction:** Expect rapid changes while the parser/queries mature. Pull the latest version before reporting issues.
+
 > **Note:** This initial version treats each `{% %}` block independently. Matching/validation of `if/elif/else` or `for/endfor` pairs is not enforced yet. The goal is to provide reliable highlighting and navigation first, then iterate on deeper structural analysis.
 
 ## Neovim Installation (nvim-treesitter)
@@ -89,6 +91,36 @@ config = function()
   vim.cmd("TSInstallFromGrammar stencil")
 end
 ```
+
+### Manual install (no `TSInstallFromGrammar`)
+
+If you can’t or don’t want to use the installer, you can wire things up manually:
+
+1. Install the CLI and create the parser directory:
+
+   ```bash
+   brew install tree-sitter-cli   # or npm/cargo equivalent
+   mkdir -p ~/.local/share/nvim/tree-sitter
+   cd ~/.local/share/nvim/tree-sitter
+   git clone https://github.com/ivantokar/tree-sitter-stencil stencil
+   cd stencil && git checkout main
+   ```
+
+2. (Optional) Rebuild the parser if you edit `grammar.js`:
+
+   ```bash
+   npm install
+   npx tree-sitter generate
+   ```
+
+3. Make sure Neovim can see the queries. Either keep them inside the clone (`queries/stencil/highlights.scm`) or copy them to your config:
+
+   ```bash
+   mkdir -p ~/.config/nvim/queries/stencil
+   cp queries/stencil/highlights.scm ~/.config/nvim/queries/stencil/highlights.scm
+   ```
+
+4. Restart Neovim, load a `.stencil` buffer, and run `:TSBufEnable highlight`. Neovim will use the manually cloned parser/queries without touching `:TSInstallFromGrammar`.
 
 ## Development
 
