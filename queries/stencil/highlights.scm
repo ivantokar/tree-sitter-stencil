@@ -8,8 +8,6 @@
 
 ((nil) @constant.builtin)
 
-(["[" "]" "(" ")" "{" "}"] @punctuation.bracket)
-
 (".." @operator)
 
 ["{{" "}}"] @punctuation.bracket
