@@ -2,11 +2,13 @@
 
 Tree-sitter grammar for the [Stencil](https://github.com/stencilproject/Stencil) templating language (commonly used across Swift/Stencil projects). The grammar focuses on recognising the templating delimiters (`{{ }}`, `{% %}`, `{# #}`), control flow tags (`if`, `elif`, `else`, `for`, etc.), and the filter expressions that are commonly used inside Stencil templates so that editor integrations (like `nvim-treesitter`) can provide syntax highlighting and structural awareness.
 
-⚠️ **Under construction:** Expect rapid changes while the parser/queries mature. Pull the latest version before reporting issues.
-
 <p align="center">
-   <img src="https://github.com/ivantokar/tree-sitter-stencil/blob/main/assets/stencil-example.jpg?raw=1" width="900">
+   <img src="https://github.com/ivantokar/tree-sitter-stencil/blob/main/assets/stencil-example.jpg?raw=1" width="900" alt="Stencil syntax highlighted with Rosé Pine">
+   <br />
+   <img src="https://github.com/ivantokar/tree-sitter-stencil/blob/main/assets/stencil-example-2.jpg?raw=1" width="900" alt="Stencil blocks/macros highlighted with another colorscheme">
 </p>
+
+Both screenshots show the same grammar capabilities across different Neovim colorschemes, illustrating how the parser handles delimiters, control blocks, macros, and collection literals. If you change the grammar or highlight queries in a way that alters the visible output, refresh the corresponding files in `assets/` (`stencil-example.jpg`, `stencil-example-2.jpg`) so the documentation stays representative.
 
 > **Note:** Control blocks are parsed structurally for highlighting and navigation, but deeper semantic validation (like ensuring matching `{% block %}` / `{% endblock %}` names) is still out of scope for now.
 
@@ -15,6 +17,13 @@ Tree-sitter grammar for the [Stencil](https://github.com/stencilproject/Stencil)
 - Control blocks such as `if/elif/else`, `for`, `block`, `macro`, `filter`, and `raw` parse as structured nodes (`if_block`, `for_block`, etc.) so folding and indentation engines know where scopes begin and end.
 - Expressions support list/dictionary literals (`[]`, `{}`), range literals (`0..n`), subscripts (`values[0]`), dotted lookups (`user.name`), and function/filter calls with positional or keyword arguments.
 - Highlight queries now ship alongside `locals.scm` and `indents.scm`, enabling Treesitter-aware highlighting, scope tracking, and indentation in Neovim.
+
+### Not Implemented (Yet)
+
+- Semantic validation across matching tags (e.g. ensuring `{% block main %}` pairs with `{% endblock main %}`, or verifying `{% if %}` / `{% endif %}` nesting).
+- Import-style tags (`{% import %}`, `{% from %}`) and advanced include-context overrides fall back to `generic_tag`.
+- Error-recovery fixtures for truncated blocks or unterminated strings are limited, so parse errors may propagate aggressively.
+- Highlighting does not yet distinguish bracket/brace punctuation or operator precedence beyond the core set documented above.
 
 ## Neovim Installation (nvim-treesitter)
 
