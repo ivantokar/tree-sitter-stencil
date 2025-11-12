@@ -13,11 +13,12 @@ Nested Filters
         (and_expression
           (not_expression
             (comparison_expression
-              (additive_expression
-                (multiplicative_expression
-                  (unary_expression
-                    (primary_expression
-                      (identifier)))))))))
+              (range_expression
+                (additive_expression
+                  (multiplicative_expression
+                    (unary_expression
+                      (primary_expression
+                        (identifier))))))))))
       (filter_chain
         name: (identifier))
       (filter_chain
@@ -34,33 +35,216 @@ Logical Condition
 ---
 
 (source_file
-  (if_tag
-    condition: (pipe_expression
+  (if_block
+    condition: (if_tag
+      condition: (pipe_expression
+        (or_expression
+          (and_expression
+            (not_expression
+              (comparison_expression
+                (range_expression
+                  (additive_expression
+                    (multiplicative_expression
+                      (unary_expression
+                        (primary_expression
+                          (member_expression
+                            (identifier)
+                            (identifier)))))))
+                (range_expression
+                  (additive_expression
+                    (multiplicative_expression
+                      (unary_expression
+                        (primary_expression
+                          (string))))))))
+            (not_expression
+              (not_expression
+                (comparison_expression
+                  (range_expression
+                    (additive_expression
+                      (multiplicative_expression
+                        (unary_expression
+                          (primary_expression
+                            (member_expression
+                              (identifier)
+                              (identifier))))))))))))))
+    end: (endif_tag))
+  (text))
+
+==================
+Collection Literals
+==================
+
+{{ [1, 2, total] }}
+{{ {"title": page.title, slug: page["slug"]} }}
+
+---
+
+(source_file
+  (output
+    expression: (pipe_expression
       (or_expression
         (and_expression
           (not_expression
             (comparison_expression
-              (additive_expression
-                (multiplicative_expression
-                  (unary_expression
-                    (primary_expression
-                      (member_expression
-                        (identifier)
-                        (identifier))))))
-              (additive_expression
-                (multiplicative_expression
-                  (unary_expression
-                    (primary_expression
-                      (string)))))))
+              (range_expression
+                (additive_expression
+                  (multiplicative_expression
+                    (unary_expression
+                      (primary_expression
+                        (list_literal
+                          (pipe_expression
+                            (or_expression
+                              (and_expression
+                                (not_expression
+                                  (comparison_expression
+                                    (range_expression
+                                      (additive_expression
+                                        (multiplicative_expression
+                                          (unary_expression
+                                            (primary_expression
+                                              (number)))))))))))
+                          (pipe_expression
+                            (or_expression
+                              (and_expression
+                                (not_expression
+                                  (comparison_expression
+                                    (range_expression
+                                      (additive_expression
+                                        (multiplicative_expression
+                                          (unary_expression
+                                            (primary_expression
+                                              (number)))))))))))
+                          (pipe_expression
+                            (or_expression
+                              (and_expression
+                                (not_expression
+                                  (comparison_expression
+                                    (range_expression
+                                      (additive_expression
+                                        (multiplicative_expression
+                                          (unary_expression
+                                            (primary_expression
+                                              (identifier)))))))))))))))))))))))
+  (output
+    expression: (pipe_expression
+      (or_expression
+        (and_expression
           (not_expression
-            (not_expression
-              (comparison_expression
+            (comparison_expression
+              (range_expression
+                (additive_expression
+                  (multiplicative_expression
+                    (unary_expression
+                      (primary_expression
+                        (dict_literal
+                          (dict_entry
+                            key: (string)
+                            value: (pipe_expression
+                              (or_expression
+                                (and_expression
+                                  (not_expression
+                                    (comparison_expression
+                                      (range_expression
+                                        (additive_expression
+                                          (multiplicative_expression
+                                            (unary_expression
+                                              (primary_expression
+                                                (member_expression
+                                                  (identifier)
+                                                  (identifier)))))))))))))
+                          (dict_entry
+                            key: (identifier)
+                            value: (pipe_expression
+                              (or_expression
+                                (and_expression
+                                  (not_expression
+                                    (comparison_expression
+                                      (range_expression
+                                        (additive_expression
+                                          (multiplicative_expression
+                                            (unary_expression
+                                              (primary_expression
+                                                (subscript_expression
+                                                  collection: (identifier)
+                                                  index: (pipe_expression
+                                                    (or_expression
+                                                      (and_expression
+                                                        (not_expression
+                                                          (comparison_expression
+                                                            (range_expression
+                                                              (additive_expression
+                                                                (multiplicative_expression
+                                                                  (unary_expression
+                                                                    (primary_expression
+                                                                      (string)))))))))))))))))))))))))))))))))))
+  (text))
+
+==================
+Ranges and Calls
+==================
+
+{{ 0..items.count }}
+{{ format_date(now(), style="short") }}
+
+---
+
+(source_file
+  (output
+    expression: (pipe_expression
+      (or_expression
+        (and_expression
+          (not_expression
+            (comparison_expression
+              (range_expression
+                (additive_expression
+                  (multiplicative_expression
+                    (unary_expression
+                      (primary_expression
+                        (number)))))
                 (additive_expression
                   (multiplicative_expression
                     (unary_expression
                       (primary_expression
                         (member_expression
                           (identifier)
-                          (identifier))))))))))))
-  (endif_tag)
+                          (identifier)))))))))))))
+  (output
+    expression: (pipe_expression
+      (or_expression
+        (and_expression
+          (not_expression
+            (comparison_expression
+              (range_expression
+                (additive_expression
+                  (multiplicative_expression
+                    (unary_expression
+                      (primary_expression
+                        (call_expression
+                          function: (identifier)
+                          arguments: (call_arguments
+                            (argument
+                              value: (or_expression
+                                (and_expression
+                                  (not_expression
+                                    (comparison_expression
+                                      (range_expression
+                                        (additive_expression
+                                          (multiplicative_expression
+                                            (unary_expression
+                                              (primary_expression
+                                                (call_expression
+                                                  function: (identifier)
+                                                  arguments: (call_arguments))))))))))))
+                            (argument
+                              name: (identifier)
+                              value: (or_expression
+                                (and_expression
+                                  (not_expression
+                                    (comparison_expression
+                                      (range_expression
+                                        (additive_expression
+                                          (multiplicative_expression
+                                            (unary_expression
+                                              (primary_expression
+                                                (string))))))))))))))))))))))))
   (text))

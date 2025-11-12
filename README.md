@@ -8,7 +8,13 @@ Tree-sitter grammar for the [Stencil](https://github.com/stencilproject/Stencil)
    <img src="https://github.com/ivantokar/tree-sitter-stencil/blob/main/assets/stencil-example.jpg?raw=1" width="900">
 </p>
 
-> **Note:** This initial version treats each `{% %}` block independently. Matching/validation of `if/elif/else` or `for/endfor` pairs is not enforced yet. The goal is to provide reliable highlighting and navigation first, then iterate on deeper structural analysis.
+> **Note:** Control blocks are parsed structurally for highlighting and navigation, but deeper semantic validation (like ensuring matching `{% block %}` / `{% endblock %}` names) is still out of scope for now.
+
+## Supported Syntax
+
+- Control blocks such as `if/elif/else`, `for`, `block`, `macro`, `filter`, and `raw` parse as structured nodes (`if_block`, `for_block`, etc.) so folding and indentation engines know where scopes begin and end.
+- Expressions support list/dictionary literals (`[]`, `{}`), range literals (`0..n`), subscripts (`values[0]`), dotted lookups (`user.name`), and function/filter calls with positional or keyword arguments.
+- Highlight queries now ship alongside `locals.scm` and `indents.scm`, enabling Treesitter-aware highlighting, scope tracking, and indentation in Neovim.
 
 ## Neovim Installation (nvim-treesitter)
 
@@ -120,11 +126,13 @@ If you can’t or don’t want to use the installer, you can wire things up manu
    npx tree-sitter generate
    ```
 
-3. Make sure Neovim can see the queries. Either keep them inside the clone (`queries/stencil/highlights.scm`) or copy them to your config:
+3. Make sure Neovim can see the queries. Either keep them inside the clone (`queries/stencil/*.scm`) or copy them to your config:
 
    ```bash
    mkdir -p ~/.config/nvim/queries/stencil
-   cp queries/stencil/highlights.scm ~/.config/nvim/queries/stencil/highlights.scm
+   for query in highlights.scm locals.scm indents.scm; do
+     cp "queries/stencil/$query" "$HOME/.config/nvim/queries/stencil/$query"
+   done
    ```
 
 4. Restart Neovim, load a `.stencil` buffer, and run `:TSBufEnable highlight`. Neovim will use the manually cloned parser/queries without touching `:TSInstallFromGrammar`.
@@ -159,3 +167,22 @@ npm test
 ```
 
 The corpus lives under `corpus/` and can be expanded with more real-world Stencil snippets.
+
+## Versioning & Release
+
+This repository keeps a single source of truth for the current version in the `VERSION` file. To bump a release, run `./scripts/bump-version.sh <major.minor.patch>`. The script writes the new value to `VERSION`, updates `package.json`/`package-lock.json` via `npm version`, and rewrites the matching entries in `Cargo.toml`, `pyproject.toml`, and `Makefile`. Example for `0.2.0`:
+
+```bash
+./scripts/bump-version.sh 0.2.0
+```
+
+The script prints the checklist of next steps so you (or CI) can follow up immediately.
+
+After bumping:
+
+1. Regenerate parser artifacts if you touched `grammar.js`: `npm run generate`.
+2. Run the grammar tests: `npm test`.
+3. Commit the changes and tag the release (`git tag v<version>`).
+4. Publish to the relevant registries (`npm publish`, `cargo publish`, `python -m build && twine upload dist/*`).
+
+The manual installer script (`scripts/install-manual.sh`) always tracks `main`, so once a tag is published downstream users can opt to pin to that tag through their Neovim parser configuration.

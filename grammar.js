@@ -3,9 +3,12 @@ const PREC = {
   or: 2,
   and: 3,
   compare: 4,
-  additive: 5,
-  multiplicative: 6,
-  unary: 7
+  range: 5,
+  additive: 6,
+  multiplicative: 7,
+  unary: 8,
+  call: 9,
+  member: 10
 };
 
 module.exports = grammar({
@@ -21,20 +24,23 @@ module.exports = grammar({
 
   rules: {
     source_file: $ =>
-      repeat(choice(
-        $.text,
-        $.comment,
-        $.output,
-        $.if_tag,
-        $.elif_tag,
-        $.else_tag,
-        $.endif_tag,
-        $.for_tag,
-        $.endfor_tag,
-        $.assignment_tag,
-        $.include_tag,
-        $.generic_tag
-      )),
+      repeat($._node),
+
+    _node: $ => choice(
+      $.text,
+      $.comment,
+      $.output,
+      $.if_block,
+      $.for_block,
+      $.block_block,
+      $.macro_block,
+      $.raw_block,
+      $.filter_block,
+      $.extends_tag,
+      $.include_tag,
+      $.assignment_tag,
+      $.generic_tag
+    ),
 
     text: $ =>
       token(prec(-1,
@@ -61,6 +67,15 @@ module.exports = grammar({
         '}}'
       ),
 
+    if_block: $ =>
+      seq(
+        field('condition', $.if_tag),
+        field('body', repeat($._node)),
+        repeat(field('alternative', $.elif_clause)),
+        optional(field('alternative', $.else_clause)),
+        field('end', $.endif_tag)
+      ),
+
     if_tag: $ =>
       seq(
         '{%',
@@ -69,12 +84,28 @@ module.exports = grammar({
         '%}'
       ),
 
+    elif_clause: $ =>
+      prec.right(1,
+        seq(
+          field('tag', $.elif_tag),
+          field('body', repeat($._node))
+        )
+      ),
+
     elif_tag: $ =>
       seq(
         '{%',
         'elif',
         field('condition', $.expression),
         '%}'
+      ),
+
+    else_clause: $ =>
+      prec.right(1,
+        seq(
+          field('tag', $.else_tag),
+          field('body', repeat($._node))
+        )
       ),
 
     else_tag: $ =>
@@ -89,6 +120,13 @@ module.exports = grammar({
         '{%',
         'endif',
         '%}'
+      ),
+
+    for_block: $ =>
+      seq(
+        field('loop', $.for_tag),
+        field('body', repeat($._node)),
+        field('end', $.endfor_tag)
       ),
 
     for_tag: $ =>
@@ -118,6 +156,117 @@ module.exports = grammar({
         choice('include', 'render'),
         field('template', $.expression),
         repeat(field('argument', $.expression)),
+        '%}'
+      ),
+
+    extends_tag: $ =>
+      seq(
+        '{%',
+        'extends',
+        field('template', $.expression),
+        '%}'
+      ),
+
+    block_block: $ =>
+      seq(
+        field('start', $.block_tag),
+        field('body', repeat($._node)),
+        field('end', $.endblock_tag)
+      ),
+
+    block_tag: $ =>
+      seq(
+        '{%',
+        'block',
+        field('name', $.identifier),
+        '%}'
+      ),
+
+    endblock_tag: $ =>
+      seq(
+        '{%',
+        'endblock',
+        optional(field('name', $.identifier)),
+        '%}'
+      ),
+
+    macro_block: $ =>
+      seq(
+        field('start', $.macro_tag),
+        field('body', repeat($._node)),
+        field('end', $.endmacro_tag)
+      ),
+
+    macro_tag: $ =>
+      seq(
+        '{%',
+        'macro',
+        field('name', $.identifier),
+        optional(field('parameters', $.macro_parameters)),
+        '%}'
+      ),
+
+    macro_parameters: $ =>
+      seq(
+        '(',
+        optional(seq($.macro_parameter, repeat(seq(',', $.macro_parameter)))),
+        ')'
+      ),
+
+    macro_parameter: $ =>
+      seq(
+        field('name', $.identifier),
+        optional(seq('=', field('default', $.expression)))
+      ),
+
+    endmacro_tag: $ =>
+      seq(
+        '{%',
+        'endmacro',
+        '%}'
+      ),
+
+    raw_block: $ =>
+      seq(
+        field('start', $.raw_tag),
+        field('body', repeat($._node)),
+        field('end', $.endraw_tag)
+      ),
+
+    raw_tag: $ =>
+      seq(
+        '{%',
+        'raw',
+        '%}'
+      ),
+
+    endraw_tag: $ =>
+      seq(
+        '{%',
+        'endraw',
+        '%}'
+      ),
+
+    filter_block: $ =>
+      seq(
+        field('start', $.filter_tag),
+        field('body', repeat($._node)),
+        field('end', $.endfilter_tag)
+      ),
+
+    filter_tag: $ =>
+      seq(
+        '{%',
+        'filter',
+        field('name', $.identifier),
+        optional(seq(':', field('arguments', $.arguments))),
+        '%}'
+      ),
+
+    endfilter_tag: $ =>
+      seq(
+        '{%',
+        'endfilter',
         '%}'
       ),
 
@@ -157,10 +306,21 @@ module.exports = grammar({
       ),
 
     arguments: $ =>
-      seq(
-        $.or_expression,
-        repeat(seq(',', $.or_expression))
+      prec.left(
+        seq(
+          $.argument,
+          repeat(seq(',', $.argument))
+        )
       ),
+
+    argument: $ => choice(
+      field('value', $.or_expression),
+      seq(
+        field('name', $.identifier),
+        '=',
+        field('value', $.or_expression)
+      )
+    ),
 
     or_expression: $ =>
       prec.left(PREC.or,
@@ -187,8 +347,20 @@ module.exports = grammar({
     comparison_expression: $ =>
       prec.left(PREC.compare,
         seq(
-          $.additive_expression,
-          repeat(seq(choice('==', '!=', '>=', '<=', '>', '<'), $.additive_expression))
+          $.range_expression,
+          repeat(seq(choice('==', '!=', '>=', '<=', '>', '<'), $.range_expression))
+        )
+      ),
+
+    range_expression: $ =>
+      choice(
+        $.additive_expression,
+        prec.left(PREC.range,
+          seq(
+            $.additive_expression,
+            '..',
+            $.additive_expression
+          )
         )
       ),
 
@@ -219,15 +391,70 @@ module.exports = grammar({
       $.number,
       $.boolean,
       $.nil,
+      $.list_literal,
+      $.dict_literal,
+      $.call_expression,
+      $.subscript_expression,
       $.member_expression,
       $.identifier,
       $.parenthesized_expression
     ),
 
-    member_expression: $ =>
+    call_expression: $ =>
+      prec.left(PREC.call,
+        seq(
+          field('function', choice($.identifier, $.member_expression, $.subscript_expression, $.call_expression)),
+          field('arguments', $.call_arguments)
+        )
+      ),
+
+    call_arguments: $ =>
       seq(
-        $.identifier,
-        repeat1(seq('.', $.identifier))
+        '(',
+        optional(seq(
+          $.argument,
+          repeat(seq(',', $.argument))
+        )),
+        ')'
+      ),
+
+    subscript_expression: $ =>
+      prec.left(PREC.member,
+        seq(
+          field('collection', choice($.identifier, $.member_expression, $.call_expression, $.subscript_expression)),
+          '[',
+          field('index', $.expression),
+          ']'
+        )
+      ),
+
+    member_expression: $ =>
+      prec.left(PREC.member,
+        seq(
+          choice($.identifier, $.subscript_expression, $.call_expression),
+          repeat1(seq('.', $.identifier))
+        )
+      ),
+
+    list_literal: $ =>
+      seq(
+        '[',
+        optional(seq($.expression, repeat(seq(',', $.expression)))),
+        ']'
+      ),
+
+    dict_literal: $ =>
+      seq(
+        '{',
+        optional(seq($.dict_entry, repeat(seq(',', $.dict_entry)))),
+        '}'
+      ),
+
+    dict_entry: $ =>
+      seq(
+        field('key', choice($.identifier, $.string)),
+        ':',
+        field('value', $.expression)
       ),
 
     parenthesized_expression: $ =>

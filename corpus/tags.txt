@@ -1,14 +1,14 @@
 ==================
-Conditional Tags
+Conditional Block
 ==================
 
-{{ "value" }}
-{% if true %}
-A
-{% elif false %}
-B
+{{ greeting }}
+{% if user.is_admin %}
+  Admin
+{% elif user.role == "editor" %}
+  Editor
 {% else %}
-C
+  Guest
 {% endif %}
 
 ---
@@ -20,138 +20,295 @@ C
         (and_expression
           (not_expression
             (comparison_expression
-              (additive_expression
-                (multiplicative_expression
-                  (unary_expression
-                    (primary_expression
-                      (string))))))))))
-  (if_tag
-    condition: (pipe_expression
-      (or_expression
-        (and_expression
-          (not_expression
-            (comparison_expression
-              (additive_expression
-                (multiplicative_expression
-                  (unary_expression
-                    (primary_expression
-                      (boolean))))))))))
-  (text)
-  (elif_tag
-    condition: (pipe_expression
-      (or_expression
-        (and_expression
-          (not_expression
-            (comparison_expression
-              (additive_expression
-                (multiplicative_expression
-                  (unary_expression
-                    (primary_expression
-                      (boolean))))))))))
-  (text)
-  (else_tag)
-  (text)
-  (endif_tag)
+              (range_expression
+                (additive_expression
+                  (multiplicative_expression
+                    (unary_expression
+                      (primary_expression
+                        (identifier))))))))))))
+  (if_block
+    condition: (if_tag
+      condition: (pipe_expression
+        (or_expression
+          (and_expression
+            (not_expression
+              (comparison_expression
+                (range_expression
+                  (additive_expression
+                    (multiplicative_expression
+                      (unary_expression
+                        (primary_expression
+                          (member_expression
+                            (identifier)
+                            (identifier)))))))))))))
+    body: (text)
+    alternative: (elif_clause
+      tag: (elif_tag
+        condition: (pipe_expression
+          (or_expression
+            (and_expression
+              (not_expression
+                (comparison_expression
+                  (range_expression
+                    (additive_expression
+                      (multiplicative_expression
+                        (unary_expression
+                          (primary_expression
+                            (member_expression
+                              (identifier)
+                              (identifier)))))))
+                  (range_expression
+                    (additive_expression
+                      (multiplicative_expression
+                        (unary_expression
+                          (primary_expression
+                            (string))))))))))))
+      body: (text))
+    alternative: (else_clause
+      tag: (else_tag)
+      body: (text))
+    end: (endif_tag))
   (text))
 
 ==================
-Loop Tag
+Loop Block
 ==================
 
-{% for item in items limit: 2 %}
-  {{ item.name | camelCase }}
+{% for item in items limit: 3 reversed %}
+  {{ item.name | upper | default: value="N/A" }}
 {% endfor %}
 
 ---
 
 (source_file
-  (for_tag
-    variable: (identifier)
-    collection: (pipe_expression
-      (or_expression
-        (and_expression
-          (not_expression
-            (comparison_expression
-              (additive_expression
-                (multiplicative_expression
-                  (unary_expression
-                    (primary_expression
-                      (identifier))))))))))
-    parameter: (for_parameter
-      name: (identifier)
-      value: (pipe_expression
+  (for_block
+    loop: (for_tag
+      variable: (identifier)
+      collection: (pipe_expression
         (or_expression
           (and_expression
             (not_expression
               (comparison_expression
-                (additive_expression
-                  (multiplicative_expression
-                    (unary_expression
-                      (primary_expression
-                        (number)))))))))))
-  (text)
-  (output
-    expression: (pipe_expression
-      (or_expression
-        (and_expression
-          (not_expression
-            (comparison_expression
-              (additive_expression
-                (multiplicative_expression
-                  (unary_expression
-                    (primary_expression
-                      (member_expression
-                        (identifier)
-                        (identifier))))))))))
-      (filter_chain
-        name: (identifier)))
-  (text)
-  (endfor_tag)
+                (range_expression
+                  (additive_expression
+                    (multiplicative_expression
+                      (unary_expression
+                        (primary_expression
+                          (identifier)))))))))))
+      parameter: (for_parameter
+        name: (identifier)
+        value: (pipe_expression
+          (or_expression
+            (and_expression
+              (not_expression
+                (comparison_expression
+                  (range_expression
+                    (additive_expression
+                      (multiplicative_expression
+                        (unary_expression
+                          (primary_expression
+                            (number))))))))))))
+      parameter: (for_parameter))
+    body: (output
+      expression: (pipe_expression
+        (or_expression
+          (and_expression
+            (not_expression
+              (comparison_expression
+                (range_expression
+                  (additive_expression
+                    (multiplicative_expression
+                      (unary_expression
+                        (primary_expression
+                          (member_expression
+                            (identifier)
+                            (identifier)))))))))))
+        (filter_chain
+          name: (identifier))
+        (filter_chain
+          name: (identifier)
+          arguments: (arguments
+            (argument
+              name: (identifier)
+              value: (or_expression
+                (and_expression
+                  (not_expression
+                    (comparison_expression
+                      (range_expression
+                        (additive_expression
+                          (multiplicative_expression
+                            (unary_expression
+                              (primary_expression
+                                (string)))))))))))))))
+    end: (endfor_tag))
   (text))
 
 ==================
-Assignment Tag
+Extends & Blocks
 ==================
 
-{% set serviceName = projectName | camelCase %}
+{% extends "layouts/base" %}
+
+{% block header %}
+  {% include "components/header" %}
+{% endblock %}
 
 ---
 
 (source_file
-  (assignment_tag
-    target: (identifier)
-    value: (pipe_expression
-      (or_expression
-        (and_expression
-          (not_expression
-            (comparison_expression
-              (additive_expression
-                (multiplicative_expression
-                  (unary_expression
-                    (primary_expression
-                      (identifier)))))))))
-      (filter_chain
-        name: (identifier))))
-  (text))
-
-==================
-Include Tag
-==================
-
-{% include "components/header" %}
-
----
-
-(source_file
-  (include_tag
+  (extends_tag
     template: (pipe_expression
       (or_expression
         (and_expression
           (not_expression
             (comparison_expression
-              (additive_expression
-                (multiplicative_expression
-                  (unary_expression
-                    (primary_expression
-                      (string)))))))))))
+              (range_expression
+                (additive_expression
+                  (multiplicative_expression
+                    (unary_expression
+                      (primary_expression
+                        (string))))))))))))
+  (block_block
+    start: (block_tag
+      name: (identifier))
+    body: (include_tag
+      template: (pipe_expression
+        (or_expression
+          (and_expression
+            (not_expression
+              (comparison_expression
+                (range_expression
+                  (additive_expression
+                    (multiplicative_expression
+                      (unary_expression
+                        (primary_expression
+                          (string))))))))))))
+    end: (endblock_tag))
+  (text))
+
+==================
+Macro, Filter & Raw
+==================
+
+{% macro greet(name="Guest", excited=true) %}
+Hello {{ name }}{% if excited %}!{% endif %}
+{% endmacro %}
+
+{% filter upper %}
+  {{ greet(name=user.name) }}
+{% endfilter %}
+
+{% raw %}
+{{ will_be_literal }}
+{% endraw %}
+
+---
+
+(source_file
+  (macro_block
+    start: (macro_tag
+      name: (identifier)
+      parameters: (macro_parameters
+        (macro_parameter
+          name: (identifier)
+          default: (pipe_expression
+            (or_expression
+              (and_expression
+                (not_expression
+                  (comparison_expression
+                    (range_expression
+                      (additive_expression
+                        (multiplicative_expression
+                          (unary_expression
+                            (primary_expression
+                              (string))))))))))))
+        (macro_parameter
+          name: (identifier)
+          default: (pipe_expression
+            (or_expression
+              (and_expression
+                (not_expression
+                  (comparison_expression
+                    (range_expression
+                      (additive_expression
+                        (multiplicative_expression
+                          (unary_expression
+                            (primary_expression
+                              (boolean))))))))))))))
+    body: (text)
+    body: (output
+      expression: (pipe_expression
+        (or_expression
+          (and_expression
+            (not_expression
+              (comparison_expression
+                (range_expression
+                  (additive_expression
+                    (multiplicative_expression
+                      (unary_expression
+                        (primary_expression
+                          (identifier))))))))))))
+    body: (if_block
+      condition: (if_tag
+        condition: (pipe_expression
+          (or_expression
+            (and_expression
+              (not_expression
+                (comparison_expression
+                  (range_expression
+                    (additive_expression
+                      (multiplicative_expression
+                        (unary_expression
+                          (primary_expression
+                            (identifier))))))))))))
+      body: (text)
+      end: (endif_tag))
+    end: (endmacro_tag))
+  (filter_block
+    start: (filter_tag
+      name: (identifier))
+    body: (output
+      expression: (pipe_expression
+        (or_expression
+          (and_expression
+            (not_expression
+              (comparison_expression
+                (range_expression
+                  (additive_expression
+                    (multiplicative_expression
+                      (unary_expression
+                        (primary_expression
+                          (call_expression
+                            function: (identifier)
+                            arguments: (call_arguments
+                              (argument
+                                name: (identifier)
+                                value: (or_expression
+                                  (and_expression
+                                    (not_expression
+                                      (comparison_expression
+                                        (range_expression
+                                          (additive_expression
+                                            (multiplicative_expression
+                                              (unary_expression
+                                                (primary_expression
+                                                  (member_expression
+                                                    (identifier)
+                                                    (identifier)))))))))))))))))))))))))
+    end: (endfilter_tag))
+  (raw_block
+    start: (raw_tag)
+    body: (output
+      expression: (pipe_expression
+        (or_expression
+          (and_expression
+            (not_expression
+              (comparison_expression
+                (range_expression
+                  (additive_expression
+                    (multiplicative_expression
+                      (unary_expression
+                        (primary_expression
+                          (identifier))))))))))))
+    end: (endraw_tag))
   (text))

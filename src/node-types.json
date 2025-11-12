@@ -40,6 +40,32 @@
     }
   },
   {
+    "type": "argument",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "or_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "arguments",
     "named": true,
     "fields": {},
@@ -48,7 +74,7 @@
       "required": true,
       "types": [
         {
-          "type": "or_expression",
+          "type": "argument",
           "named": true
         }
       ]
@@ -81,9 +107,162 @@
     }
   },
   {
+    "type": "block_block",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "assignment_tag",
+            "named": true
+          },
+          {
+            "type": "block_block",
+            "named": true
+          },
+          {
+            "type": "comment",
+            "named": true
+          },
+          {
+            "type": "extends_tag",
+            "named": true
+          },
+          {
+            "type": "filter_block",
+            "named": true
+          },
+          {
+            "type": "for_block",
+            "named": true
+          },
+          {
+            "type": "generic_tag",
+            "named": true
+          },
+          {
+            "type": "if_block",
+            "named": true
+          },
+          {
+            "type": "include_tag",
+            "named": true
+          },
+          {
+            "type": "macro_block",
+            "named": true
+          },
+          {
+            "type": "output",
+            "named": true
+          },
+          {
+            "type": "raw_block",
+            "named": true
+          },
+          {
+            "type": "text",
+            "named": true
+          }
+        ]
+      },
+      "end": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "endblock_tag",
+            "named": true
+          }
+        ]
+      },
+      "start": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block_tag",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "block_tag",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "boolean",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "call_arguments",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "argument",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "call_expression",
+    "named": true,
+    "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "call_arguments",
+            "named": true
+          }
+        ]
+      },
+      "function": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "member_expression",
+            "named": true
+          },
+          {
+            "type": "subscript_expression",
+            "named": true
+          }
+        ]
+      }
+    }
   },
   {
     "type": "comment",
@@ -99,10 +278,129 @@
       "required": true,
       "types": [
         {
-          "type": "additive_expression",
+          "type": "range_expression",
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "dict_entry",
+    "named": true,
+    "fields": {
+      "key": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "dict_literal",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "dict_entry",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "elif_clause",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "assignment_tag",
+            "named": true
+          },
+          {
+            "type": "block_block",
+            "named": true
+          },
+          {
+            "type": "comment",
+            "named": true
+          },
+          {
+            "type": "extends_tag",
+            "named": true
+          },
+          {
+            "type": "filter_block",
+            "named": true
+          },
+          {
+            "type": "for_block",
+            "named": true
+          },
+          {
+            "type": "generic_tag",
+            "named": true
+          },
+          {
+            "type": "if_block",
+            "named": true
+          },
+          {
+            "type": "include_tag",
+            "named": true
+          },
+          {
+            "type": "macro_block",
+            "named": true
+          },
+          {
+            "type": "output",
+            "named": true
+          },
+          {
+            "type": "raw_block",
+            "named": true
+          },
+          {
+            "type": "text",
+            "named": true
+          }
+        ]
+      },
+      "tag": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "elif_tag",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -122,7 +420,102 @@
     }
   },
   {
+    "type": "else_clause",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "assignment_tag",
+            "named": true
+          },
+          {
+            "type": "block_block",
+            "named": true
+          },
+          {
+            "type": "comment",
+            "named": true
+          },
+          {
+            "type": "extends_tag",
+            "named": true
+          },
+          {
+            "type": "filter_block",
+            "named": true
+          },
+          {
+            "type": "for_block",
+            "named": true
+          },
+          {
+            "type": "generic_tag",
+            "named": true
+          },
+          {
+            "type": "if_block",
+            "named": true
+          },
+          {
+            "type": "include_tag",
+            "named": true
+          },
+          {
+            "type": "macro_block",
+            "named": true
+          },
+          {
+            "type": "output",
+            "named": true
+          },
+          {
+            "type": "raw_block",
+            "named": true
+          },
+          {
+            "type": "text",
+            "named": true
+          }
+        ]
+      },
+      "tag": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "else_tag",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "else_tag",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "endblock_tag",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "endfilter_tag",
     "named": true,
     "fields": {}
   },
@@ -135,6 +528,116 @@
     "type": "endif_tag",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "endmacro_tag",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "endraw_tag",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "extends_tag",
+    "named": true,
+    "fields": {
+      "template": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "filter_block",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "assignment_tag",
+            "named": true
+          },
+          {
+            "type": "block_block",
+            "named": true
+          },
+          {
+            "type": "comment",
+            "named": true
+          },
+          {
+            "type": "extends_tag",
+            "named": true
+          },
+          {
+            "type": "filter_block",
+            "named": true
+          },
+          {
+            "type": "for_block",
+            "named": true
+          },
+          {
+            "type": "generic_tag",
+            "named": true
+          },
+          {
+            "type": "if_block",
+            "named": true
+          },
+          {
+            "type": "include_tag",
+            "named": true
+          },
+          {
+            "type": "macro_block",
+            "named": true
+          },
+          {
+            "type": "output",
+            "named": true
+          },
+          {
+            "type": "raw_block",
+            "named": true
+          },
+          {
+            "type": "text",
+            "named": true
+          }
+        ]
+      },
+      "end": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "endfilter_tag",
+            "named": true
+          }
+        ]
+      },
+      "start": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "filter_tag",
+            "named": true
+          }
+        ]
+      }
+    }
   },
   {
     "type": "filter_chain",
@@ -156,6 +659,116 @@
         "types": [
           {
             "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "filter_tag",
+    "named": true,
+    "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "arguments",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "for_block",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "assignment_tag",
+            "named": true
+          },
+          {
+            "type": "block_block",
+            "named": true
+          },
+          {
+            "type": "comment",
+            "named": true
+          },
+          {
+            "type": "extends_tag",
+            "named": true
+          },
+          {
+            "type": "filter_block",
+            "named": true
+          },
+          {
+            "type": "for_block",
+            "named": true
+          },
+          {
+            "type": "generic_tag",
+            "named": true
+          },
+          {
+            "type": "if_block",
+            "named": true
+          },
+          {
+            "type": "include_tag",
+            "named": true
+          },
+          {
+            "type": "macro_block",
+            "named": true
+          },
+          {
+            "type": "output",
+            "named": true
+          },
+          {
+            "type": "raw_block",
+            "named": true
+          },
+          {
+            "type": "text",
+            "named": true
+          }
+        ]
+      },
+      "end": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "endfor_tag",
+            "named": true
+          }
+        ]
+      },
+      "loop": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "for_tag",
             "named": true
           }
         ]
@@ -251,6 +864,104 @@
     }
   },
   {
+    "type": "if_block",
+    "named": true,
+    "fields": {
+      "alternative": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "elif_clause",
+            "named": true
+          },
+          {
+            "type": "else_clause",
+            "named": true
+          }
+        ]
+      },
+      "body": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "assignment_tag",
+            "named": true
+          },
+          {
+            "type": "block_block",
+            "named": true
+          },
+          {
+            "type": "comment",
+            "named": true
+          },
+          {
+            "type": "extends_tag",
+            "named": true
+          },
+          {
+            "type": "filter_block",
+            "named": true
+          },
+          {
+            "type": "for_block",
+            "named": true
+          },
+          {
+            "type": "generic_tag",
+            "named": true
+          },
+          {
+            "type": "if_block",
+            "named": true
+          },
+          {
+            "type": "include_tag",
+            "named": true
+          },
+          {
+            "type": "macro_block",
+            "named": true
+          },
+          {
+            "type": "output",
+            "named": true
+          },
+          {
+            "type": "raw_block",
+            "named": true
+          },
+          {
+            "type": "text",
+            "named": true
+          }
+        ]
+      },
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "if_tag",
+            "named": true
+          }
+        ]
+      },
+      "end": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "endif_tag",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "if_tag",
     "named": true,
     "fields": {
@@ -293,6 +1004,172 @@
     }
   },
   {
+    "type": "list_literal",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "macro_block",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "assignment_tag",
+            "named": true
+          },
+          {
+            "type": "block_block",
+            "named": true
+          },
+          {
+            "type": "comment",
+            "named": true
+          },
+          {
+            "type": "extends_tag",
+            "named": true
+          },
+          {
+            "type": "filter_block",
+            "named": true
+          },
+          {
+            "type": "for_block",
+            "named": true
+          },
+          {
+            "type": "generic_tag",
+            "named": true
+          },
+          {
+            "type": "if_block",
+            "named": true
+          },
+          {
+            "type": "include_tag",
+            "named": true
+          },
+          {
+            "type": "macro_block",
+            "named": true
+          },
+          {
+            "type": "output",
+            "named": true
+          },
+          {
+            "type": "raw_block",
+            "named": true
+          },
+          {
+            "type": "text",
+            "named": true
+          }
+        ]
+      },
+      "end": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "endmacro_tag",
+            "named": true
+          }
+        ]
+      },
+      "start": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "macro_tag",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "macro_parameter",
+    "named": true,
+    "fields": {
+      "default": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "macro_parameters",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "macro_parameter",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "macro_tag",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "parameters": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "macro_parameters",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "member_expression",
     "named": true,
     "fields": {},
@@ -301,7 +1178,15 @@
       "required": true,
       "types": [
         {
+          "type": "call_expression",
+          "named": true
+        },
+        {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "subscript_expression",
           "named": true
         }
       ]
@@ -424,7 +1309,19 @@
           "named": true
         },
         {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "dict_literal",
+          "named": true
+        },
+        {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "list_literal",
           "named": true
         },
         {
@@ -446,9 +1343,117 @@
         {
           "type": "string",
           "named": true
+        },
+        {
+          "type": "subscript_expression",
+          "named": true
         }
       ]
     }
+  },
+  {
+    "type": "range_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "additive_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "raw_block",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "assignment_tag",
+            "named": true
+          },
+          {
+            "type": "block_block",
+            "named": true
+          },
+          {
+            "type": "comment",
+            "named": true
+          },
+          {
+            "type": "extends_tag",
+            "named": true
+          },
+          {
+            "type": "filter_block",
+            "named": true
+          },
+          {
+            "type": "for_block",
+            "named": true
+          },
+          {
+            "type": "generic_tag",
+            "named": true
+          },
+          {
+            "type": "if_block",
+            "named": true
+          },
+          {
+            "type": "include_tag",
+            "named": true
+          },
+          {
+            "type": "macro_block",
+            "named": true
+          },
+          {
+            "type": "output",
+            "named": true
+          },
+          {
+            "type": "raw_block",
+            "named": true
+          },
+          {
+            "type": "text",
+            "named": true
+          }
+        ]
+      },
+      "end": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "endraw_tag",
+            "named": true
+          }
+        ]
+      },
+      "start": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "raw_tag",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "raw_tag",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "source_file",
@@ -463,27 +1468,23 @@
           "named": true
         },
         {
+          "type": "block_block",
+          "named": true
+        },
+        {
           "type": "comment",
           "named": true
         },
         {
-          "type": "elif_tag",
+          "type": "extends_tag",
           "named": true
         },
         {
-          "type": "else_tag",
+          "type": "filter_block",
           "named": true
         },
         {
-          "type": "endfor_tag",
-          "named": true
-        },
-        {
-          "type": "endif_tag",
-          "named": true
-        },
-        {
-          "type": "for_tag",
+          "type": "for_block",
           "named": true
         },
         {
@@ -491,7 +1492,7 @@
           "named": true
         },
         {
-          "type": "if_tag",
+          "type": "if_block",
           "named": true
         },
         {
@@ -499,7 +1500,15 @@
           "named": true
         },
         {
+          "type": "macro_block",
+          "named": true
+        },
+        {
           "type": "output",
+          "named": true
+        },
+        {
+          "type": "raw_block",
           "named": true
         },
         {
@@ -522,6 +1531,44 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "subscript_expression",
+    "named": true,
+    "fields": {
+      "collection": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "member_expression",
+            "named": true
+          },
+          {
+            "type": "subscript_expression",
+            "named": true
+          }
+        ]
+      },
+      "index": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -596,6 +1643,10 @@
     "named": false
   },
   {
+    "type": "..",
+    "named": false
+  },
+  {
     "type": "/",
     "named": false
   },
@@ -628,11 +1679,23 @@
     "named": false
   },
   {
+    "type": "[",
+    "named": false
+  },
+  {
+    "type": "]",
+    "named": false
+  },
+  {
     "type": "and",
     "named": false
   },
   {
     "type": "assign",
+    "named": false
+  },
+  {
+    "type": "block",
     "named": false
   },
   {
@@ -644,6 +1707,14 @@
     "named": false
   },
   {
+    "type": "endblock",
+    "named": false
+  },
+  {
+    "type": "endfilter",
+    "named": false
+  },
+  {
     "type": "endfor",
     "named": false
   },
@@ -652,11 +1723,27 @@
     "named": false
   },
   {
+    "type": "endmacro",
+    "named": false
+  },
+  {
+    "type": "endraw",
+    "named": false
+  },
+  {
     "type": "escape_sequence",
     "named": true
   },
   {
+    "type": "extends",
+    "named": false
+  },
+  {
     "type": "false",
+    "named": false
+  },
+  {
+    "type": "filter",
     "named": false
   },
   {
@@ -680,6 +1767,10 @@
     "named": false
   },
   {
+    "type": "macro",
+    "named": false
+  },
+  {
     "type": "nil",
     "named": false
   },
@@ -697,6 +1788,10 @@
   },
   {
     "type": "or",
+    "named": false
+  },
+  {
+    "type": "raw",
     "named": false
   },
   {
@@ -720,6 +1815,10 @@
     "named": false
   },
   {
+    "type": "{",
+    "named": false
+  },
+  {
     "type": "{#",
     "named": false
   },
@@ -733,6 +1832,10 @@
   },
   {
     "type": "|",
+    "named": false
+  },
+  {
+    "type": "}",
     "named": false
   },
   {

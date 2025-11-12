@@ -47,8 +47,12 @@ else
   warn "npm not found; skipping parser regeneration"
 fi
 
-info "Copying highlight queries to $CONFIG_QUERY_DIR"
+info "Copying query files to $CONFIG_QUERY_DIR"
 mkdir -p "$CONFIG_QUERY_DIR"
-cp queries/stencil/highlights.scm "$CONFIG_QUERY_DIR/highlights.scm"
+for query in highlights.scm locals.scm indents.scm; do
+  if [ -f "queries/stencil/$query" ]; then
+    cp "queries/stencil/$query" "$CONFIG_QUERY_DIR/$query"
+  fi
+done
 
 highlight "Done. Restart Neovim and run :TSBufEnable highlight inside a .stencil buffer."
