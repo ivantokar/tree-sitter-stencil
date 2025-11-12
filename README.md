@@ -4,7 +4,7 @@ Tree-sitter grammar for the [Stencil](https://github.com/stencilproject/Stencil)
 
 ⚠️ **Under construction:** Expect rapid changes while the parser/queries mature. Pull the latest version before reporting issues.
 
-![Stencil highlighting example](assets/stencil-example.jpg)
+![Stencil highlighting example](assets/stencil-example.png?raw=1)
 
 > **Note:** This initial version treats each `{% %}` block independently. Matching/validation of `if/elif/else` or `for/endfor` pairs is not enforced yet. The goal is to provide reliable highlighting and navigation first, then iterate on deeper structural analysis.
 
