@@ -36,7 +36,8 @@ use({
   "nvim-treesitter/nvim-treesitter",
   run = ":TSUpdate",
 })
-vim.cmd("TSInstallFromGrammar stencil")
+-- Once per machine run inside Neovim:
+-- :TSInstallFromGrammar stencil
 ```
 
 ```lua
@@ -48,7 +49,8 @@ vim.cmd("TSInstallFromGrammar stencil")
     require("nvim-treesitter.configs").setup({
       highlight = { enable = true },
     })
-    vim.cmd("TSInstallFromGrammar stencil")
+    -- Once per machine run inside Neovim:
+    -- :TSInstallFromGrammar stencil
   end,
 }
 ```
@@ -88,7 +90,8 @@ config = function()
     -- your existing treesitter settings …
   })
 
-  vim.cmd("TSInstallFromGrammar stencil")
+  -- Run inside Neovim once per machine:
+  -- :TSInstallFromGrammar stencil
 end
 ```
 
@@ -121,6 +124,22 @@ If you can’t or don’t want to use the installer, you can wire things up manu
    ```
 
 4. Restart Neovim, load a `.stencil` buffer, and run `:TSBufEnable highlight`. Neovim will use the manually cloned parser/queries without touching `:TSInstallFromGrammar`.
+
+You can automate the steps above by running:
+
+```bash
+chmod +x scripts/install-manual.sh
+./scripts/install-manual.sh
+```
+
+Or from scratch (without an existing checkout):
+
+```bash
+git clone https://github.com/ivantokar/tree-sitter-stencil
+cd tree-sitter-stencil
+chmod +x scripts/install-manual.sh
+./scripts/install-manual.sh
+```
 
 ## Development
 
