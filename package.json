@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ivantokar/tree-sitter-stencil.git"
+    "url": "git+https://github.com/ivantokar/tree-sitter-stencil.git"
   },
   "keywords": [
     "tree-sitter",
