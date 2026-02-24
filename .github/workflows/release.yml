@@ -1,8 +1,0 @@
-name: Release
-
-# Triggered when a version tag is pushed.
-# Extend this file when registry publishing is needed (npm, crates.io, PyPI).
-on:
-  push:
-    tags:
-      - "v*.*.*"
