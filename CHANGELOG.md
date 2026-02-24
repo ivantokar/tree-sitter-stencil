@@ -25,8 +25,6 @@ Versions track [Semantic Versioning](https://semver.org/).
 - `CONTRIBUTING.md` — setup, workflow, commit style, PR and issue guidance.
 - `CHANGELOG.md` — this file.
 - `LICENSE` — MIT, © 2026 Ivan Tokar.
-- `.github/workflows/release.yml` — tag-triggered publish to npm, crates.io,
-  and PyPI.
 
 ### Fixed (metadata)
 - `package.json`: `author` was empty, now `"Ivan Tokar"`.
