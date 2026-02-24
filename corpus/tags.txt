@@ -298,17 +298,58 @@ Hello {{ name }}{% if excited %}!{% endif %}
     end: (endfilter_tag))
   (raw_block
     start: (raw_tag)
-    body: (output
-      expression: (pipe_expression
-        (or_expression
-          (and_expression
-            (not_expression
-              (comparison_expression
-                (range_expression
-                  (additive_expression
-                    (multiplicative_expression
-                      (unary_expression
-                        (primary_expression
-                          (identifier))))))))))))
+    body: (raw_body)
+    end: (endraw_tag))
+  (text))
+
+==================
+Comment Block
+==================
+
+{# This is a comment #}
+{# multi-word comment with {{ tags }} inside #}
+
+---
+
+(source_file
+  (comment)
+  (comment)
+  (text))
+
+==================
+Import Tag (generic fallback)
+==================
+
+{% import "macros.stencil" %}
+
+---
+
+(source_file
+  (generic_tag
+    name: (identifier)
+    argument: (pipe_expression
+      (or_expression
+        (and_expression
+          (not_expression
+            (comparison_expression
+              (range_expression
+                (additive_expression
+                  (multiplicative_expression
+                    (unary_expression
+                      (primary_expression
+                        (string))))))))))))
+  (text))
+
+==================
+Empty Raw Block
+==================
+
+{% raw %}{% endraw %}
+
+---
+
+(source_file
+  (raw_block
+    start: (raw_tag)
     end: (endraw_tag))
   (text))

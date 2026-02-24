@@ -12,17 +12,21 @@ Both screenshots show the same grammar capabilities across different Neovim colo
 
 > **Note:** Control blocks are parsed structurally for highlighting and navigation, but deeper semantic validation (like ensuring matching `{% block %}` / `{% endblock %}` names) is still out of scope for now.
 
+> **`{% raw %}` blocks** — content inside `{% raw %}…{% endraw %}` is captured as a single opaque `raw_body` node by an external C scanner. Stencil delimiters (`{{ }}`, `{% %}`) inside the block are treated as plain text and are never parsed as expression or tag nodes, matching the runtime behaviour of the Stencil engine.
+
 ## Supported Syntax
 
 - Control blocks such as `if/elif/else`, `for`, `block`, `macro`, `filter`, and `raw` parse as structured nodes (`if_block`, `for_block`, etc.) so folding and indentation engines know where scopes begin and end.
+- `{% raw %}…{% endraw %}` blocks use an external C scanner (`src/scanner.c`) that captures the entire body as a single `raw_body` node — Stencil delimiters inside are never interpreted.
 - Expressions support list/dictionary literals (`[]`, `{}`), range literals (`0..n`), subscripts (`values[0]`), dotted lookups (`user.name`), and function/filter calls with positional or keyword arguments.
 - Highlight queries now ship alongside `locals.scm` and `indents.scm`, enabling Treesitter-aware highlighting, scope tracking, and indentation in Neovim.
+- `indents.scm` marks opening tags (`if_tag`, `for_tag`, …) with `@indent.begin`, closing tags with `@indent.end`, and `elif_tag` / `else_tag` with `@indent.branch` to prevent double-indentation on branch keywords.
 
 ### Not Implemented (Yet)
 
 - Semantic validation across matching tags (e.g. ensuring `{% block main %}` pairs with `{% endblock main %}`, or verifying `{% if %}` / `{% endif %}` nesting).
-- Import-style tags (`{% import %}`, `{% from %}`) and advanced include-context overrides fall back to `generic_tag`.
-- Error-recovery fixtures for truncated blocks or unterminated strings are limited, so parse errors may propagate aggressively.
+- `{% import "file" %}` falls back to `generic_tag` and parses correctly. `{% from "file" import name, … %}` cannot be parsed correctly with the current grammar (the comma-separated import list conflicts with the expression parser); such tags produce a parse error.
+- Error-recovery for truncated blocks or unterminated strings is limited; parse errors may propagate aggressively.
 - Highlighting does not yet distinguish bracket/brace punctuation or operator precedence beyond the core set documented above.
 
 ## Neovim Installation (nvim-treesitter)
@@ -179,19 +183,33 @@ The corpus lives under `corpus/` and can be expanded with more real-world Stenci
 
 ## Versioning & Release
 
-This repository keeps a single source of truth for the current version in the `VERSION` file. To bump a release, run `./scripts/bump-version.sh <major.minor.patch>`. The script writes the new value to `VERSION`, updates `package.json`/`package-lock.json` via `npm version`, and rewrites the matching entries in `Cargo.toml`, `pyproject.toml`, and `Makefile`. Example for `0.2.0`:
+This repository keeps a single source of truth for the current version in the `VERSION` file. To cut a release:
 
 ```bash
-./scripts/bump-version.sh 0.2.0
+# 1. Bump version across all manifests
+./scripts/bump-version.sh 0.4.0
+
+# 2. Regenerate parser artifacts if grammar.js was edited
+npm run generate
+
+# 3. Run tests
+npm test
+
+# 4. Commit and push a version tag — the release workflow fires automatically
+git add -A
+git commit -m "Release v0.4.0"
+git tag v0.4.0
+git push origin main --tags
 ```
 
-The script prints the checklist of next steps so you (or CI) can follow up immediately.
+Pushing the `v*.*.*` tag triggers `.github/workflows/release.yml`, which publishes simultaneously to:
 
-After bumping:
+| Registry | Secret required |
+|----------|-----------------|
+| **npm** | `NPM_TOKEN` |
+| **crates.io** | `CARGO_REGISTRY_TOKEN` |
+| **PyPI** | `PYPI_API_TOKEN` |
 
-1. Regenerate parser artifacts if you touched `grammar.js`: `npm run generate`.
-2. Run the grammar tests: `npm test`.
-3. Commit the changes and tag the release (`git tag v<version>`).
-4. Publish to the relevant registries (`npm publish`, `cargo publish`, `python -m build && twine upload dist/*`).
+Add those secrets under **Settings → Secrets → Actions** in the GitHub repository before the first release. If a registry publish is not needed, delete the corresponding job from the workflow file.
 
-The manual installer script (`scripts/install-manual.sh`) always tracks `main`, so once a tag is published downstream users can opt to pin to that tag through their Neovim parser configuration.
+The manual installer script (`scripts/install-manual.sh`) always tracks `main`, so downstream Neovim users can opt to pin to a specific tag through their parser configuration.

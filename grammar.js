@@ -14,6 +14,10 @@ const PREC = {
 module.exports = grammar({
   name: 'stencil',
 
+  externals: $ => [
+    $.raw_body,
+  ],
+
   extras: $ => [
     /\s+/
   ],
@@ -229,7 +233,7 @@ module.exports = grammar({
     raw_block: $ =>
       seq(
         field('start', $.raw_tag),
-        field('body', repeat($._node)),
+        optional(field('body', $.raw_body)),
         field('end', $.endraw_tag)
       ),
 

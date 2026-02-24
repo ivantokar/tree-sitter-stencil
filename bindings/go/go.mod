@@ -1,4 +1,4 @@
-module github.com/tree-sitter/tree-sitter-stencil
+module github.com/ivantokar/tree-sitter-stencil
 
 go 1.22
 

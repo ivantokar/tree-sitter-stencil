@@ -1,12 +1,13 @@
 [package]
 name = "tree-sitter-stencil"
 description = "Stencil grammar for tree-sitter"
-version = "0.3.0"
+version = "0.4.0"
+authors = ["Ivan Tokar"]
 license = "MIT"
 readme = "README.md"
 keywords = ["incremental", "parsing", "tree-sitter", "stencil"]
 categories = ["parsing", "text-editors"]
-repository = "https://github.com/tree-sitter/tree-sitter-stencil"
+repository = "https://github.com/ivantokar/tree-sitter-stencil"
 edition = "2021"
 autoexamples = false
 
