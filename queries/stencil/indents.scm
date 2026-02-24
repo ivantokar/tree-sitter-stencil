@@ -1,35 +1,25 @@
-(if_block
-  body: (_) @indent.begin)
+; Opening tags mark the start of an indented block.
+; @indent.begin is applied to the tag node itself (not to its body children)
+; so only one indent level is opened per block, regardless of how many body
+; nodes exist.
+(if_tag) @indent.begin
+(for_tag) @indent.begin
+(block_tag) @indent.begin
+(macro_tag) @indent.begin
+(filter_tag) @indent.begin
+(raw_tag) @indent.begin
 
-(elif_clause
-  body: (_) @indent.begin)
+; Branch tags dedent themselves back to the opening keyword's column, then
+; let their body content be indented.  Using @indent.branch (rather than
+; @indent.begin) prevents a double-indent when an elif/else immediately
+; follows an if/elif body.
+(elif_clause (elif_tag) @indent.branch)
+(else_clause (else_tag) @indent.branch)
 
-(else_clause
-  body: (_) @indent.begin)
-
+; Closing tags mark the end of an indented block.
 (endif_tag) @indent.end
-
-(for_block
-  body: (_) @indent.begin)
-
 (endfor_tag) @indent.end
-
-(block_block
-  body: (_) @indent.begin)
-
 (endblock_tag) @indent.end
-
-(macro_block
-  body: (_) @indent.begin)
-
 (endmacro_tag) @indent.end
-
-(filter_block
-  body: (_) @indent.begin)
-
 (endfilter_tag) @indent.end
-
-(raw_block
-  body: (_) @indent.begin)
-
 (endraw_tag) @indent.end

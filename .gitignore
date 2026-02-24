@@ -36,3 +36,7 @@ dist/
 *.wasm
 *.obj
 *.o
+
+# macOS metadata
+.DS_Store
+**/.DS_Store

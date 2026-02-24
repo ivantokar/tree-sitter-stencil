@@ -248,3 +248,58 @@ Ranges and Calls
                                               (primary_expression
                                                 (string))))))))))))))))))))))))
   (text))
+
+==================
+String Escape Sequences
+==================
+
+{{ "hello \"world\"" }}
+{{ 'it\'s fine' }}
+{{ "line1\nline2\ttabbed\\end" }}
+
+---
+
+(source_file
+  (output
+    expression: (pipe_expression
+      (or_expression
+        (and_expression
+          (not_expression
+            (comparison_expression
+              (range_expression
+                (additive_expression
+                  (multiplicative_expression
+                    (unary_expression
+                      (primary_expression
+                        (string
+                          (escape_sequence)
+                          (escape_sequence))))))))))))
+  (output
+    expression: (pipe_expression
+      (or_expression
+        (and_expression
+          (not_expression
+            (comparison_expression
+              (range_expression
+                (additive_expression
+                  (multiplicative_expression
+                    (unary_expression
+                      (primary_expression
+                        (string
+                          (escape_sequence))))))))))))))
+  (output
+    expression: (pipe_expression
+      (or_expression
+        (and_expression
+          (not_expression
+            (comparison_expression
+              (range_expression
+                (additive_expression
+                  (multiplicative_expression
+                    (unary_expression
+                      (primary_expression
+                        (string
+                          (escape_sequence)
+                          (escape_sequence)
+                          (escape_sequence))))))))))))
+  (text))

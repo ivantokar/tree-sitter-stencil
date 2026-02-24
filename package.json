@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-stencil",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Tree-sitter grammar for the Stencil templating language",
   "main": "bindings/node",
   "types": "bindings/node",
@@ -27,7 +27,7 @@
     "queries/*",
     "src/**"
   ],
-  "author": "",
+  "author": "Ivan Tokar",
   "license": "MIT",
   "dependencies": {
     "node-gyp-build": "^4.8.0",
