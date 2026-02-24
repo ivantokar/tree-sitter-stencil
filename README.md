@@ -38,7 +38,7 @@ local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 parser_config.stencil = {
   install_info = {
     url = "https://github.com/ivantokar/tree-sitter-stencil",
-    files = { "src/parser.c" },
+    files = { "src/parser.c", "src/scanner.c" },
     branch = "main",
   },
   filetype = "stencil",
@@ -97,7 +97,7 @@ config = function()
   parser_config.stencil = {
     install_info = {
       url = "https://github.com/ivantokar/tree-sitter-stencil",
-      files = { "src/parser.c" },
+      files = { "src/parser.c", "src/scanner.c" },
       branch = "main",
     },
     filetype = "stencil",
