@@ -202,14 +202,4 @@ git tag v0.4.0
 git push origin main --tags
 ```
 
-Pushing the `v*.*.*` tag triggers `.github/workflows/release.yml`, which publishes simultaneously to:
-
-| Registry | Secret required |
-|----------|-----------------|
-| **npm** | `NPM_TOKEN` |
-| **crates.io** | `CARGO_REGISTRY_TOKEN` |
-| **PyPI** | `PYPI_API_TOKEN` |
-
-Add those secrets under **Settings → Secrets → Actions** in the GitHub repository before the first release. If a registry publish is not needed, delete the corresponding job from the workflow file.
-
 The manual installer script (`scripts/install-manual.sh`) always tracks `main`, so downstream Neovim users can opt to pin to a specific tag through their parser configuration.
